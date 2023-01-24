@@ -1,0 +1,63 @@
+.chat {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #e0fbfc;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+.header {
+  background-color: #b5838d;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.header h4 {
+  font-size: 1em;
+}
+
+.main {
+  padding: 30px;
+  height: 60vh;
+  overflow-y: scroll;
+  /* Para ponerle un scroll a la pantalla de mensajes y no sobrepase el tamaño dado*/
+}
+
+.main ul {
+  list-style: none;
+}
+
+.main ul li {
+  margin: 10px 0;
+}
+
+.footer {
+  background-color: #b5838d;
+  color: white;
+  padding: 20px;
+}
+
+.formulario {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.formulario button {
+  width: 200px;
+  border-style: none;
+  border-radius: 5px;
+
+}
+
+.formulario button:hover {
+  transition: 0.2s ease-in;
+  background-color: #9ff7fa;
+}
+
+.owner {
+  color: tomato;
+}

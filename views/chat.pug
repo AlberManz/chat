@@ -1,0 +1,68 @@
+extends layout.pug
+
+block content
+  .chat
+    .header
+      h3 FIRST CHAT
+      h4#numUsers
+    .main
+      ul(id="mensajes")
+        //- Los mensajes llegan al revés colocados así que con el reverse() les damos la vuelta para que aparezcan bien
+        each message in messages.reverse()
+          if message.user._id.toString() === user.id.toString()
+            li.owner #{message.user.username}: #{message.text}
+          else
+            li #{message.user.username}: #{message.text}
+    .footer
+      h5 Usuario activo: #{user.username}
+      .formulario
+        label.form-label Mensaje
+        input#inputMensaje.form-control(type="text")
+        button#btnEnviar Enviar
+  //- Todo lo que escribamos a partir de aquí es javascript
+  script.
+    // Dentro de este script estamos interactuando con los eventos de la entidad gráfica (lo que vemos en el navegador)
+    const socket = io(); // Este es el canal entre cliente y servidor
+
+    const btnEnviar = document.getElementById('btnEnviar');
+    const inputMensaje = document.getElementById('inputMensaje');
+    const mensajes = document.getElementById('mensajes');
+    const numUsers = document.getElementById('numUsers');
+
+    // Los tenemos disponibles FUERA del script así que necesitamos almacenarlo dentro de una variable para usarlo
+    const username = "#{user.username}";
+    const user_id = "#{user._id}"
+
+    btnEnviar.addEventListener('click', () => {
+      const mensaje = inputMensaje.value // Capturamos el valor que haya en el input donde escribimos el mensaje
+
+      const obj = {
+        message: mensaje,
+        username, // username: username
+        user_id // user_id: user_id
+      }
+      //- console.log(obj) Para ver el objeto
+
+      // Le ponemos el nombre que queramos al evento (chat_message) y le pasamos el objeto
+      socket.emit('chat_message', obj);
+    });
+
+    socket.on('chat_message', (data) => {
+      console.log(data); // Visualizamos los datos que se mandan en la consola del navegador
+      // data tiene: message, username y user_id
+      // Creamos un nuevo LI dentro del ul mensajes
+      // Tenemos createElement, innerText, append, appendChild (solo permite añadir nodos completos (elementos html (li, div...)), lo normal es usar append que puedes añadir texto plano y elementos html
+      const li = document.createElement('li');
+      li.innerText = `${data.user.username}: ${data.text}`;
+
+      // Con esto estamos dando una clase al usuario que escribe para diferenciar sus mensajes pudiendo darle las propiedades en css que queramos (en este ejemplo en CSS le he puesto un color diferente)
+      if(user_id === data.user._id){
+        li.classList.add('owner');
+      }
+
+      mensajes.append(li);
+    });
+
+    socket.on('chat_users', (data) => {
+      numUsers.innerText = `Usuarios conectados: ${data}`;
+    });
