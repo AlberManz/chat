@@ -3,9 +3,9 @@ const router = require('express').Router();
 const User = require('../models/user.model');
 const Message = require('../models/message.model');
 
-router.get('/', (req, res) => {
-  res.redirect('/chat');
-})
+// router.get('/', (req, res) => {
+//   res.redirect('/chat');
+// });
 
 router.get('/register', (req, res) => {
   res.render('register');
